@@ -42,7 +42,7 @@ else
   pmt.puts " Found #{ttl} file(s) \n\n".light_blue
   if TR::RTUtils.on_linux?
     begin
-      sel = pmt.select(" Open the files? ".yellow) do |m|
+      sel = pmt.select(" Open the files? ".yellow, per_page: 10) do |m|
         found.values.flatten.each do |f|
           m.choice " * #{f}", f
         end
