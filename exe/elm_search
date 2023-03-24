@@ -26,46 +26,60 @@ else
 
   pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
 
-  ttl = 0
-  found = {  }
-
   files = Dir.glob(File.join(root,"**/**")).reject { |f| File.directory?(f) }
 
   filter = ElibMgmt::Cli::FileFilter.new(root)
-  kw.each do |k|
-    res = filter.filter(k, "**/**") 
 
-    found[k] = res
-    ttl += res.length
-  end
+  loop do
 
-  pmt.puts " Found #{ttl} file(s) \n\n".light_blue
-  if TR::RTUtils.on_linux?
-    begin
-      sel = pmt.select(" Open the files? ".yellow, per_page: 10) do |m|
-        found.values.flatten.each do |f|
-          m.choice " * #{f}", f
+    ttl = 0
+    found = {  }
+
+    kw.each do |k|
+      res = filter.filter(k, "**/**") 
+
+      found[k] = res
+      ttl += res.length
+    end
+
+    pmt.puts " Found #{ttl} file(s) \n\n".light_blue
+    if TR::RTUtils.on_linux?
+      begin
+        sel = pmt.select(" Open the files? ".yellow, per_page: 10) do |m|
+          found.values.flatten.each do |f|
+            m.choice " * #{f}", f
+          end
+          m.choice " + New keyword", :new
+          m.choice " + I've done", :abort
         end
-        m.choice " + I've done", :abort
-      end
 
-      if sel != :abort
-        `xdg-open #{sel}`
-      else
+        case sel
+        when :new
+          newKw = pmt.ask(" Please provide a new keywords (separated by ',') : ", required: true)
+          kw = newKw.split(",").map { |v| v.strip }.reject { |v| v.empty? }
+        when :abort
+          pmt.puts "\n\n Have a nice day\n\n".yellow
+          break
+        else
+          `xdg-open #{sel}`
+          break
+        end
+      rescue TTY::Reader::InputInterrupt
         pmt.puts "\n\n Have a nice day\n\n".yellow
+        break
       end
-    rescue TTY::Reader::InputInterrupt
-        pmt.puts "\n\n Have a nice day\n\n".yellow
-    end
 
-  else
+    else
 
-    found.each do |k,v|
-      v.each do |f|
-        pmt.puts " * #{f}"
+      found.each do |k,v|
+        v.each do |f|
+          pmt.puts " * #{f}"
+        end
       end
+
+      break
+
     end
 
   end
-
 end
