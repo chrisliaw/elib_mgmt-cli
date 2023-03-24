@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+
+require 'elib_mgmt/cli'
+require 'tty/prompt'
+require 'colorize'
+
+require 'string/similarity'
+require 'openssl'
+
+if ARGV.length < 3
+  STDERR.puts " <root> <dir name> <keyword, split by ','>".red
+  exit(0)
+
+else
+  pmt = TTY::Prompt.new
+
+  pmt.puts "\n eLib Management Utilities version #{ElibMgmt::Cli::VERSION}\n\n"
+  pmt.puts " Auto sort files into specific directory\n\n"
+
+  root = ARGV.first
+  root = File.expand_path(root)
+
+  outDir = ARGV[1]
+
+  kw = ARGV[2]
+  kw = kw.split(",").map { |v| v.strip }.reject { |v| v.empty? }
+
+  pmt.puts " Root to search : #{root}\n\n"
+  pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
+
+  output = File.join(root,"AS_#{outDir.gsub(" ","-")}")
+  FileUtils.mkdir_p(output) if not File.exist?(output)
+
+  filter = ElibMgmt::Cli::FileFilter.new(root)
+  ttl = 0
+  kw.each do |k|
+    res = filter.filter(k,"**/**")
+
+    ttl += res.length
+    pmt.puts " Moving #{res.length} file(s)".light_blue
+    res.each do |f|
+      dest = File.join(output, File.basename(f))
+      FileUtils.mv(f, dest) if f != dest
+    end
+    pmt.puts " #{res.length} file(s) moved".light_blue
+  end
+  
+  pmt.puts "\n\n Total #{ttl} file(s) moved\n\n".green
+
+end

@@ -1,0 +1,113 @@
+#!/usr/bin/env ruby
+
+require 'elib_mgmt/cli'
+require 'tty/prompt'
+require 'colorize'
+require 'yaml'
+require 'toolrack'
+include TR::CondUtils
+
+require 'string/similarity'
+require 'openssl'
+
+if ARGV.length < 1
+  STDERR.puts " <root> <config file>".red
+  exit(0)
+
+else
+  pmt = TTY::Prompt.new
+
+  pmt.puts "\n eLib Management Utilities version #{ElibMgmt::Cli::VERSION}\n\n"
+  pmt.puts " Auto sort files into specific directory\n\n"
+
+  root = ARGV.first
+  root = File.expand_path(root)
+  
+  pmt.puts " Root to search : #{root}\n\n"
+
+  conf = ARGV[1]
+  if is_empty?(conf)
+    raise RuntimeError, "Config file is empty" 
+  else
+    conf = File.expand_path(conf)
+    raise RuntimeError, "Given config file '#{conf}' is not available" if not File.exist?(conf)
+  end
+
+  moveConf = YAML.load(File.open(conf))
+
+  if moveConf["config"]["reset_before_sort"]
+    pmt.puts "Reset all files before sorting start"
+    res = Dir.glob(File.join(root,"**/**")).reject { |f| File.directory?(f) }
+    res.each do |f|
+      dest = File.join(root, File.basename(f))
+      FileUtils.mv(f, dest) if dest != f
+    end
+    pmt.puts " #{res.length} files moved to root for sorting process"
+  end
+
+  ttl = 0
+  moveConf[:sort_spec].each do |c|
+
+    outDir = c[:outdir]
+
+    kw = c[:matcher]
+    pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
+
+    output = File.join(root,"AS_#{outDir.gsub(" ","-")}")
+    FileUtils.mkdir_p(output) if not File.exist?(output)
+
+    filter = ElibMgmt::Cli::FileFilter.new(root)
+
+    kw.each do |k|
+
+      case k
+      when Hash
+        found = filter.filter(k.keys.first, "**/**", k.values.first) 
+      else
+        found = filter.filter(k, "**/**")
+      end
+
+      ttl += found.length
+      pmt.puts " Moving #{found.length} file(s)".light_blue
+      found.uniq.each do |f|
+        dest = File.join(output, File.basename(f))
+        FileUtils.mv(f, dest) if f != dest
+      end
+      pmt.puts " #{found.length} file(s) moved".light_blue
+
+    end
+
+    # sub directory
+    if not_empty?(c[:sub_dir_spec])
+
+      subFilter = ElibMgmt::Cli::FileFilter.new(output)
+      c[:sub_dir_spec].each do |sf|
+        sfOut = File.join(output, sf[:outdir])
+        FileUtils.mkdir_p(sfOut) if not File.exist?(sfOut)
+
+        kw = sf[:matcher]
+        pmt.puts " Keyword to search for sub : #{kw.join(", ")}\n\n"
+
+        kw.each do |k|
+          found = subFilter.filter(k, "**")
+        
+          uf = found.uniq
+          ttl += uf.length
+          if not uf.empty?
+            pmt.puts " Moving #{uf.length} sub directory file(s)".light_blue
+            uf.each do |ff|
+              dest = File.join(sfOut, File.basename(ff))
+              FileUtils.mv(ff, dest) if ff != dest
+            end
+            pmt.puts " #{uf.length} sub directory file(s) moved".light_blue
+          end
+        end
+
+      end
+    end # sub dir
+
+  end
+
+  pmt.puts "\n\n Total #{ttl} file(s) moved\n\n".green
+
+end

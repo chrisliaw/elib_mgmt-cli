@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+
+require 'elib_mgmt/cli'
+require 'tty/prompt'
+require 'colorize'
+
+require 'string/similarity'
+require 'openssl'
+
+if ARGV.length == 0
+  STDERR.puts " Root to find the files is required.".red
+  exit(0)
+
+else
+  pmt = TTY::Prompt.new
+
+  pmt.puts "\n eLib Management Utilities version #{ElibMgmt::Cli::VERSION}\n\n"
+  pmt.puts " File duplicated files from the given path\n\n"
+
+  root = ARGV.first
+  root = File.expand_path(root)
+
+  pmt.puts " Root to search : #{root}\n\n"
+
+  path = File.join(root,"**/**")
+
+  res = Dir.glob(path).reject { |f| File.directory?(f) }
+  pmt.puts " Total #{res.length} file(s) found\n\n".yellow
+
+  db = {  }
+  seen = []
+  found = []
+  res.each do |f|
+
+    d = Digest::SHA1.digest(File.read(f))
+    if seen.include?(d)
+      puts "#{f} : #{db[d]}"
+      found << [f, db[d]]
+    else
+      db[d] = f
+      seen << d
+      puts "Processed #{seen.length} / #{res.length} (#{(seen.length.to_f/res.length.to_f*100.0).ceil(2)} %)"
+    end
+
+  end
+
+  if found.length > 0
+    begin
+      found.each do |f|
+        sel = pmt.select(" There are some duplicated files found. Please select which one to DELETE or keep both : ".yellow) do |m|
+          m.choice f[0], f[0]
+          m.choice f[1], f[1]
+          m.choice "Keep both", :keep
+        end
+
+        if sel != :keep
+          proceed = pmt.yes?(" Delete file at ? \n #{sel}".yellow)
+          if proceed
+            ElibMgmt::Cli.move_to_int_bin(root, sel)
+            pmt.puts " Duplicated file '#{sel}' moved to bin".green
+          else
+            pmt.puts " File deletion skipped.".yellow
+          end
+        end
+      end
+    rescue TTY::Reader::InputInterrup
+    ensure
+      pmt.puts " All duplicated files done processing".green
+    end
+
+    #pmt.puts " All duplicated files done processing".green
+  else
+    pmt.puts " There is no duplicated files found".green
+  end
+
+end
+

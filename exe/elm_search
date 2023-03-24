@@ -1,0 +1,71 @@
+#!/usr/bin/env ruby
+
+require 'elib_mgmt/cli'
+require 'tty/prompt'
+require 'colorize'
+
+require 'string/similarity'
+require 'openssl'
+
+if ARGV.length < 2
+  STDERR.puts " <root> <keyword, split by ','>".red
+  exit(0)
+
+else
+  pmt = TTY::Prompt.new
+
+  pmt.puts "\n eLib Management Utilities version #{ElibMgmt::Cli::VERSION}\n\n"
+  pmt.puts " Search files with specific keywords"
+
+  root = ARGV.first
+  root = File.expand_path(root)
+  pmt.puts " Root to search : #{root}\n\n"
+
+  kw = ARGV[1]
+  kw = kw.split(",").map { |v| v.strip }.reject { |v| v.empty? }
+
+  pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
+
+  ttl = 0
+  found = {  }
+
+  files = Dir.glob(File.join(root,"**/**")).reject { |f| File.directory?(f) }
+
+  filter = ElibMgmt::Cli::FileFilter.new(root)
+  kw.each do |k|
+    res = filter.filter(k, "**/**") 
+
+    found[k] = res
+    ttl += res.length
+  end
+
+  pmt.puts " Found #{ttl} file(s) \n\n".light_blue
+  if TR::RTUtils.on_linux?
+    begin
+      sel = pmt.select(" Open the files? ".yellow) do |m|
+        found.values.flatten.each do |f|
+          m.choice " * #{f}", f
+        end
+        m.choice " + I've done", :abort
+      end
+
+      if sel != :abort
+        `xdg-open #{sel}`
+      else
+        pmt.puts "\n\n Have a nice day\n\n".yellow
+      end
+    rescue TTY::Reader::InputInterrupt
+        pmt.puts "\n\n Have a nice day\n\n".yellow
+    end
+
+  else
+
+    found.each do |k,v|
+      v.each do |f|
+        pmt.puts " * #{f}"
+      end
+    end
+
+  end
+
+end

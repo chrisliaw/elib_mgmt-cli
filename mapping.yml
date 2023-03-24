@@ -1,0 +1,357 @@
+
+
+---
+  "config": 
+    "reset_before_sort": true
+  :sort_spec:
+  - :outdir: "R"
+    :matcher: 
+      - "r": 
+          :mode: :strict 
+  - :outdir: "Design related"
+    :matcher: 
+      - "design"
+      - "ux"
+      - "user experience" 
+      - "designing interfaces"
+  - :outdir: "Javascript"
+    :matcher: 
+      - "javascript"
+      - "d3" 
+      - "ext-js" 
+      - "highchart"
+  - :outdir: "Javascript/jQuery"
+    :matcher: 
+      - "jquery"
+  - :outdir: "Javascript/React"
+    :matcher: 
+      - "react"
+  - :outdir: "Javascript/Vue"
+    :matcher: 
+      - "vue"
+  - :outdir: "Javascript/Node"
+    :matcher: 
+      - "node"
+  - :outdir: "Blockchain"
+    :matcher: 
+      - "blockchain"
+      - "bitcoin" 
+      - "ethereum"
+  - :outdir: "Ada"
+    :matcher: 
+      - "ada"
+  - :outdir: "Security"
+    :matcher: 
+      - "secur*"
+      -  "tls"
+      -  "ssl"
+      -  "cryptogra*"
+      -  "threat" 
+      -  "malware" 
+      -  "penetrat*"
+      -  "reverse*"
+      -  "bounty*"
+      -  "offensive*" 
+      -  "ethical" 
+      -  "forensic"
+      -  "crack*"
+      -  "hack*"
+      -  "cybercrime" 
+      -  "attack*"
+      -  "defend*"
+      -  "dark web"
+      -  "trustworthy" 
+      -  "exploit*" 
+      -  "blackhat" 
+      -  "gray hat" 
+      -  "dump analysis" 
+      -  "threat*" 
+      -  "antivirus" 
+      -  "backtrack"
+      -  "obfuscation*" 
+      -  "devopssec" 
+      -  "hack*"
+      -  "memory analysis" 
+      -  "openvpn" 
+      -  "rootkit*" 
+      -  "intrusion*" 
+      -  "pentest*" 
+      -  "fuzz*" 
+      -  "burp" 
+      -  "red team" 
+      -  "blue team" 
+      -  "ghidra" 
+      -  "binary analysis" 
+      -  "radare*"
+  - :outdir: "Security/Metasploit"
+    :matcher: 
+      - "metasploit"
+  - :outdir: "Security/netcat"
+    :matcher: 
+      - "netcat"
+  - :outdir: "Security/nmap"
+    :matcher: 
+      - "nmap"
+  - :outdir: "Security/Wireshark"
+    :matcher: 
+      - "wireshark"
+  - :outdir: "Security/CISSP"
+    :matcher: 
+      - "cissp"
+  - :outdir: "Security/SANS"
+    :matcher: 
+      - "sans"
+  - :outdir: "Security/IDA"
+    :matcher: 
+      - "ida"
+  - :outdir: "Arduino"
+    :matcher: 
+      - "arduino"
+  - :outdir: "Scala"
+    :matcher: 
+      - "scala"
+  - :outdir: "Clojure"
+    :matcher: 
+      - "clojure"
+  - :outdir: "Java"
+    :matcher: 
+      - "java" 
+      - "jdk" 
+      - "jre" 
+      - "hibernate" 
+      - "swt" 
+      - "jfx" 
+      - "javafx"
+  - :outdir: "Java/Android"
+    :matcher: 
+      - "android"
+  - :outdir: "Agile-Scrum"
+    :matcher: 
+      - "agile" 
+      - "scrum"
+  - :outdir: "Software Business"
+    :matcher: 
+      - "in search of stupidity"
+      - "open source"
+  - :outdir: "Software Engineering"
+    :matcher: 
+      - "domain driven" 
+      - "test driven" 
+      - "tdd" 
+      - "bdd" 
+      - "software testing" 
+      - "continuous delivery" 
+      - "event processing" 
+      - "devops" 
+      - "software estimation" 
+      - "software by number" 
+      - "software technology" 
+      - "programming architecture" 
+      - "iterative software development"
+  - :outdir: "Software Engineering/Testing"
+    :matcher: 
+      - "testing"
+  - :outdir: "Software Engineering/Clean"
+    :matcher: 
+      - "clean"
+  - :outdir: "Software Engineering/Design Pattern"
+    :matcher: 
+      - "design pattern*"
+      - "pattern*"
+  - :outdir: "Software Engineering Tools"
+    :matcher: 
+      - "git"
+      - "vagrant" 
+      - "docker" 
+      - "elastic" 
+      - "cassandra" 
+      - "entity framework" 
+      - "hadoop" 
+      - "test automation" 
+      - "jenkin" 
+      - "jmeter" 
+      - "gradle" 
+      - "apache" 
+      - "libvirt" 
+      - "telegram"
+  - :outdir: "Database"
+    :matcher: 
+      - "graph databases"
+  - :outdir: "Database/PostgreSQL"
+    :matcher: 
+      - "postgres*"
+  - :outdir: "Raspberry-Pi"
+    :matcher:
+      - "raspberry*"
+  - :outdir: "Mobile Dev"
+    :matcher: 
+      - "mobile"
+      - "hybrid"
+  - :outdir: "Python"
+    :matcher: 
+      - "python"
+  - :outdir: "Windows"
+    :matcher: 
+      - "windows"
+  - :outdir: "_nix"
+    :matcher: 
+      - "unix"
+  - :outdir: "_nix/linux"
+    :matcher: 
+      - "linux"
+      - "gdb"
+      - "kernel"
+      - "bash"
+  - :outdir: "_nix/bsd"
+    :matcher: 
+      - "bsd"
+  - :outdir: "Others/OpenCV"
+    :matcher: 
+      - "opencv" 
+  - :outdir: "Others/Tensorflow"
+    :matcher: 
+      - "tensorflow" 
+  - :outdir: "Others/IPV6"
+    :matcher: 
+      - "ipv6" 
+  - :outdir: "Others/tex"
+    :matcher: 
+      - "tex" 
+  - :outdir: "Lisp Scheme Family"
+    :matcher: 
+      - "lisp"
+      - "scheme"
+  - :outdir: "Prolog"
+    :matcher: 
+      - "prolog"
+  - :outdir: "Excel"
+    :matcher: 
+      - "excel"
+  - :outdir: "GIMP"
+    :matcher: 
+      - "gimp"
+  - :outdir: "Editor/VIM"
+    :matcher: 
+      - "vim"
+      - "vi"
+  - :outdir: "Editor/Emacs"
+    :matcher: 
+      - "emacs"
+  - :outdir: "Editor/Sublime"
+    :matcher: 
+      - "sublime"
+  - :outdir: "GUI/gtk"
+    :matcher: 
+      - "gtk"
+      - "gnome"
+  - :outdir: "GUI/Qt"
+    :matcher: 
+      - "qt"
+  - :outdir: "GUI/wxWidget"
+    :matcher: 
+      - "wxwidget"
+  - :outdir: "Algo"
+    :matcher: 
+      - "art of computer programming"
+      - "algo*"
+      - "bayesian"
+  - :outdir: "Elixir-Erlang"
+    :matcher: 
+      - "erlang"
+      - "elixir"
+      - "phoenix"
+      - "gen-server"
+  - :outdir: "Flutter-Dart"
+    :matcher: 
+      - "flutter"
+      - "dart"
+  - :outdir: "Automation"
+    :matcher: 
+      - "cucumber"
+      - "capybara"
+      - "chef"
+      - "selenium"
+      - "puppet"
+  - :outdir: "lua"
+    :matcher: 
+      - "lua"
+  - :outdir: "Rust"
+    :matcher: 
+      - "rust*"
+  - :outdir: "Go"
+    :matcher: 
+      - "go*"
+      - "golang"
+  - :outdir: "Mac iOS"
+    :matcher: 
+      - "swift" 
+      -  "ios" 
+      -  "iphone" 
+      -  "ipad" 
+      -  "objective-c" 
+      -  "apple" 
+      -  "xcode"
+  - :outdir: "C Assembly Compiler OS"
+    :matcher: 
+      - "intel"
+      -  "c":
+          :mode: :strict
+      -  "assembly" 
+      -  "opcode" 
+      -  "ooc" 
+      -  "gcc" 
+      -  "c20" 
+      -  "cuda" 
+      -  "pointer" 
+      -  "compiler" 
+      -  "operating system" 
+      -  "pthread*" 
+      -  "c\\+\\+"
+      -  "antlr"
+  - :outdir: "MicroService RESTFUL WebService"
+    :matcher: 
+      - "web service*"
+      - "rest*"
+      - "microservice*"
+  - :outdir: "Game-3D"
+    :matcher: 
+      - "unity"
+      - "webgl" 
+      - "opengl" 
+      - "blender" 
+      - "3d" 
+      - "unreal" 
+      - "game" 
+      - "vulkan" 
+    :sub_dir_spec:
+      - :outdir: "Android"
+        :matcher: 
+          - "android"
+      - :outdir: "Blender"
+        :matcher: 
+          - "blender"
+      - :outdir: "Java"
+        :matcher: 
+          - "java javafx"
+      - :outdir: "Swift_iOS"
+        :matcher: 
+          - "swift"
+          - "ios"
+      - :outdir: "Unity"
+        :matcher: 
+          - "unity"
+      - :outdir: "Unreal"
+        :matcher: 
+          - "unreal"
+      - :outdir: "OpenGL"
+        :matcher: 
+          - "opengl"
+  - :outdir: "Ruby-Rails"
+    :matcher: 
+      - "ruby*"
+      -  "rails" 
+      -  "rspec" 
+      -  "rake" 
+      -  "sinatra" 
+      -  "nokogiri" 
+      -  "merb"
