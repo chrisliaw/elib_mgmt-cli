@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    elib_mgmt-cli (0.1.6)
+    elib_mgmt-cli (0.1.7)
       colorize
       teLogger
       toolrack
