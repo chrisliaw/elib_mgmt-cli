@@ -7,7 +7,6 @@ require 'yaml'
 require 'toolrack'
 include TR::CondUtils
 
-require 'string/similarity'
 require 'openssl'
 
 if ARGV.length < 1

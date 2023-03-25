@@ -4,7 +4,6 @@ require 'elib_mgmt/cli'
 require 'tty/prompt'
 require 'colorize'
 
-require 'string/similarity'
 require 'openssl'
 
 if ARGV.length == 0
