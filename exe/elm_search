@@ -43,7 +43,7 @@ else
     end
 
     pmt.puts " Found #{ttl} file(s) \n\n".light_blue
-    if TR::RTUtils.on_linux?
+    if TR::RTUtils.on_linux? or TR::RTUtils.on_mac?
       begin
         sel = pmt.select(" Open the files? ".yellow, per_page: 10) do |m|
           found.values.flatten.each do |f|
@@ -61,7 +61,13 @@ else
           pmt.puts "\n\n Have a nice day\n\n".yellow
           break
         else
-          `xdg-open #{sel}`
+          if TR::RTUtils.on_linux?
+            `xdg-open #{sel}`
+          elsif TR::RTUtils.on_mac?
+            `open #{sel}`
+          else
+            pmt.puts "\n\nNot sure how to open from this platform. Please nagivate to the file location at '#{sel}' and open from there\n\n".red
+          end
           break
         end
       rescue TTY::Reader::InputInterrupt
