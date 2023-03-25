@@ -23,8 +23,6 @@ else
   kw = ARGV[1]
   kw = kw.split(",").map { |v| v.strip }.reject { |v| v.empty? }
 
-  pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
-
   files = Dir.glob(File.join(root,"**/**")).reject { |f| File.directory?(f) }
 
   filter = ElibMgmt::Cli::FileFilter.new(root)
@@ -55,6 +53,8 @@ else
             system("cls")
           end
 
+          pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
+
           if not opened.empty?
             pmt.puts("\n\n You've opened: ".light_blue)
             opened.each do |o|
@@ -83,9 +83,9 @@ else
             break
           else
             if TR::RTUtils.on_linux?
-              `xdg-open #{sel}`
+              `xdg-open \"#{sel}\"`
             elsif TR::RTUtils.on_mac?
-              `open #{sel}`
+              `open \"#{sel}\"`
             else
               pmt.puts "\n\nNot sure how to open from this platform. Please nagivate to the file location at '#{sel}' and open from there\n\n".red
             end
