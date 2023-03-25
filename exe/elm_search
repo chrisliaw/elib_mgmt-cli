@@ -48,7 +48,12 @@ else
         opened = []
         loopWithNewKw = false
         loop do
-          system("clear")
+
+          if TR::RTUtils.on_linux? or TR::RTUtils.on_mac?
+            system("clear")
+          else
+            system("cls")
+          end
 
           if not opened.empty?
             pmt.puts("\n\n You've opened: ".light_blue)
