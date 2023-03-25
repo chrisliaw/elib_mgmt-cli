@@ -24,54 +24,55 @@ module ElibMgmt
           []
         else
 
-          defOpts = {
-            mode: :relax
-          }
-
-          sOpts = defOpts.merge(opts)
-
           spec = []
-          if name.include?("*")
+          #if name.include?("*")
 
-            found = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
+          #  found = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
 
-              vv = File.basename(v)
-              spec = name.gsub("*","\\w*")
-              case sOpts[:mode]
-              when :strict
-                #@logger.odebug "Word with '*' '#{name}' strict mode"
-                vv =~ /[\(,-,_,.,\s]#{spec}[\),-,_,.,\s]/i or
-                vv =~ /^#{spec}#{SPat}/i or
-                vv =~ /#{SPat}#{spec}\z/i 
-              else
-                #@logger.odebug "Word with '*' '#{name}' relax mode"
-                vv =~ /#{SPat}#{spec}#{SPat}/i or
-                  vv =~ /#{SPat}#{spec}/i or
-                  vv =~ /#{spec}#{SPat}/i
-              end
+          #    vv = File.basename(v, File.extname(v)).downcase
+          #    spec = name.downcase.gsub("*","\\w*")
 
-            }
+          #    # beginning
+          #    # exact match
+          #    vv =~ /^#{spec}\z/i or
+          #    # match starting with keyword
+          #    vv =~ /^#{spec}[-,.,_,\s]/i or
 
-          elsif name.include?(" ")
+          #    # middle
+          #    vv =~ /[-,.,_,|,\s,\W]#{spec}[-,.,_,|,\s,\W]/i or
+          #    #vv =~ /[-,.,_,\s]#{spec}[-,.,_,\s]/i or
 
-            pname = name.split(" ").map { |v| "#{v}" }
-            spec = pname.join(SPat)
+          #    # ending
+          #    vv =~ /[-,.,_,\s]#{spec}\z/i or
+          #    vv =~ /[-,.,_,\s,\[,\(]#{spec}[\],\)]/i 
+          #    #vv =~ /[-,.,_,\s]#{spec}\z/i
+
+          #  }
+
+          #elsif name.include?(" ")
+          if name.include?(" ")
+
+            pname = name.split(" ").map { |v| "#{v.downcase}" }
+            spec = pname.join("[-,.,_,|,\s,\W]")
             
             found = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
 
-              vv = File.basename(v)
-              case sOpts[:mode]
-              when :strict
-                #@logger.odebug "Word with space '#{name}' strict mode"
-                vv =~ /#{SPat}#{spec}#{SPat}/i or
-                  vv =~ /^#{spec}#{SPat}/i or
-                  vv =~ /#{SPat}#{spec}\z/i 
-              else
-                #@logger.odebug "Word with space '#{name}' relax mode"
-                vv =~ /#{SPat}#{spec}#{SPat}/i or
-                  vv =~ /#{SPat}#{spec}/i or
-                  vv =~ /#{spec}#{SPat}/i
-              end
+              vv = File.basename(v, File.extname(v)).downcase
+
+              # beginning
+              # exact match
+              vv =~ /^#{spec}\z/i or
+              # match starting with keyword
+              vv =~ /^#{spec}[-,.,_,\s\W]/i or
+
+              # middle
+              vv =~ /[-,.,_,|,\s,\W]#{spec}[-,.,_,|,\s,\W]/i or
+              #vv =~ /[-,.,_,\s]#{spec}[-,.,_,\s]/i or
+             
+              # ending
+              vv =~ /[-,.,_,\s]#{spec}\z/i or
+              #vv =~ /[-,.,_,\s,\[,\(]#{spec}[\],\)]/i 
+              vv =~ /[-,.,_,|,\s,\W]#{spec}[-,.,_,|,\s,\W]\z/i 
 
             }
 
@@ -81,57 +82,31 @@ module ElibMgmt
             # single word
             found = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
 
-              vv = File.basename(v)
-              case sOpts[:mode]
-              when :strict
-                #@logger.debug "Single word '#{name}' strict mode"
-                  vv =~ /^#{name}[-,_,.,\s]/i or vv =~ /[-,_,.,\s]#{name}[-,_,.,\s]/i or vv =~ /[-,_,.,\s]#{name}\z/i 
-              else
-                #@logger.debug "Single word '#{name}' relex mode"
-                vv =~ /[-,_,.,\s]#{name}[-,_,.,\s]/i or
-                  vv =~ /[-,_,.,\s]#{name}/i or
-                  vv =~ /#{name}[-,_,.,\s]/i
-              end
+              spec = name.downcase
+              vv = File.basename(v, File.extname(v)).downcase
+
+              # beginning
+              # exact match
+              vv =~ /^#{spec}\z/i or
+              # match starting with keyword
+              vv =~ /^#{spec}[-,.,_,\s,\W]/i or
+              
+              # middle
+              vv =~ /[-,.,_,|,\s,\W]#{spec}[-,.,_,|,\s,\W]/i or
+              #vv =~ /[-,.,_,\s]#{name}[-,.,_,\s]/i or
+              
+              # ending
+              vv =~ /[-,.,_,\s,\W]#{spec}\z/i or
+              #vv =~ /[-,.,_,\s,\[,\(]#{name}[\],\)]/i 
+              vv =~ /[-,.,_,|,\s,\W]#{spec}[-,.,_,|,\s,\W]\z/i 
 
             }
 
           end
 
-          #if name.include?(" ")
-
-          #  ["-","_","."].each do |c|
-          #    key = name.downcase.split(" ")
-          #    res = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
-          #      n = File.basename(v, File.extname(v)).downcase
-          #      (key - n.split(" ").map(&:strip)).empty? || (key - n.split("-").map(&:strip)).empty? || (key - n.split("_").map(&:strip)).empty? || (key - n.split(".").map(&:strip)).empty?
-          #    }
-          #    found += res
-          #  end
-
-          #else
-
-          #  key = name.downcase
-          #  res = Dir.glob(File.join(@base_path, pattern)).reject { |f| File.directory?(f) }.select { |v| 
-          #    n = File.basename(v, File.extname(v)).downcase
-          #    n.split(" ").map(&:strip).include?(key) || n.split("-").map(&:strip).include?(key) || n.split("_").map(&:strip).include?(key) || n.split(".").map(&:strip).include?(key)
-          #  }
-          #  found += res
-
-          #end
-
-          #found.uniq
           found
         end
 
-      end
-
-      private
-      def const_pattern(val)
-        [
-          "#{SPat}#{val}#{SPat}",
-          "#{SPat}#{val}",
-          "#{val}#{SPat}"
-        ]
       end
 
 
