@@ -3,7 +3,6 @@ PATH
   specs:
     elib_mgmt-cli (0.1.4)
       colorize
-      string-similarity
       teLogger
       toolrack
       tty-prompt
@@ -48,7 +47,6 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
-    string-similarity (2.1.0)
     teLogger (0.2.2)
     toolrack (0.20.1)
       base58
