@@ -77,6 +77,7 @@ else
             newKw = pmt.ask(" Please provide a new keywords (separated by ',') : ", required: true)
             kw = newKw.split(",").map { |v| v.strip }.reject { |v| v.empty? }
             loopWithNewKw = true
+            break
           when :abort
             pmt.puts "\n\n Have a nice day\n\n".yellow
             loopWithNewKw = false
