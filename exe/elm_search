@@ -53,7 +53,9 @@ else
             system("cls")
           end
 
-          pmt.puts " Keyword to search : #{kw.join(", ")}\n\n"
+          pmt.puts "\n eLib Management Utilities version #{ElibMgmt::Cli::VERSION}\n\n".yellow
+          pmt.puts " Search files with specific keywords\n".yellow
+          pmt.puts " Keyword to search : #{kw.join(", ")}\n\n".yellow
 
           if not opened.empty?
             pmt.puts("\n\n You've opened: ".light_blue)
@@ -84,9 +86,9 @@ else
             break
           else
             if TR::RTUtils.on_linux?
-              `xdg-open \"#{sel}\"`
+              `xdg-open \"#{sel}\" &`
             elsif TR::RTUtils.on_mac?
-              `open \"#{sel}\"`
+              `open \"#{sel}\" &`
             else
               pmt.puts "\n\nNot sure how to open from this platform. Please nagivate to the file location at '#{sel}' and open from there\n\n".red
             end
